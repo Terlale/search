@@ -4,15 +4,14 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 const App = () => {
   const [data, setData] = useState([]);
+  const [searchText, setSearchText] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://randomuser.me/api/?results=50`)
-      .then((res) => {
-        setData(res.data.results);
-      })
-      
+    axios.get(`https://randomuser.me/api/?results=50`).then((res) => {
+      setData(res.data.results);
+    });
   }, []);
-  
+
   return (
     <div>
       <div
@@ -21,13 +20,13 @@ const App = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0px 60px",
-          backgroundColor: "#707379",
+          backgroundColor: "rgb(105 106 110 / 52%)",
         }}
       >
         <div>
-          <h1 style={{color: "white"}}>Logo</h1>
+          <h1 style={{ color: "white" }}>Logo</h1>
         </div>
-        <div style={{display:"flex"}}>
+        <div style={{ display: "flex" }}>
           <input
             type="text"
             placeholder="Search"
@@ -36,6 +35,7 @@ const App = () => {
               borderRadius: "15px 0px 0px 15px",
               border: "none",
               paddingLeft: "10px",
+              outline: "none",
             }}
           />
           <button
@@ -45,23 +45,45 @@ const App = () => {
               border: "none",
               borderRadius: "0px 15px 15px 0px",
               width: "38px",
-              backgroundColor: "yellow",         
+              backgroundColor: "#ffff74",
             }}
           >
             <AiOutlineSearch />
           </button>
         </div>
       </div>
-      <div style={{padding: "0px 60px",}}>
-        <h2 style={{textAlign:"center"}}>Users' names</h2>
-        <hr/>
+      <div style={{ padding: "0px 60px" }}>
+        <h2 style={{ textAlign: "center" }}>Users</h2>
+        <hr />
         <div>
-        <ul style={{listStyleType:"decimal"}}>
-        {data.map((item) => (
-          <li><h3 key={item.login.uuid}>{item.name.first}</h3></li>
-        ))}
-        </ul>
-      </div>
+          {data.map((item) => (
+            <div
+              key={item.login.uuid}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "15px",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                margin: "20px 0px",
+                padding: " 0px 5px",
+                borderRadius: "10px",
+              }}
+            >
+              <img
+                src={item.picture.thumbnail}
+                alt={item.name.first}
+                style={{
+                  borderRadius: "50%",
+                  width: "37px",
+                  border: "4px solid grey",
+                }}
+              />
+              <h3>
+                {item.name.title}. {item.name.first} {item.name.last}
+              </h3>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

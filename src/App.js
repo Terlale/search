@@ -4,13 +4,23 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [searchText, setSearchText] = useState([]);
+  const [searchText, setSearchText] = useState("")
 
   useEffect(() => {
     axios.get(`https://randomuser.me/api/?results=50`).then((res) => {
       setData(res.data.results);
     });
   }, []);
+  
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredUsers = data.filter((item) =>
+  `${item.name.title} ${item.name.first} ${item.name.last}`
+    .toLowerCase()
+    .includes(searchText.toLowerCase())
+);
 
   return (
     <div>
@@ -37,6 +47,8 @@ const App = () => {
               paddingLeft: "10px",
               outline: "none",
             }}
+            value={searchText}
+            onChange={handleSearch}
           />
           <button
             type="submit"
@@ -56,7 +68,7 @@ const App = () => {
         <h2 style={{ textAlign: "center" }}>Users</h2>
         <hr />
         <div>
-          {data.map((item) => (
+          {filteredUsers.map((item) => (
             <div
               key={item.login.uuid}
               style={{
